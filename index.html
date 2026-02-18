@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Project Quote — Grow Smart AI</title>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#0a0a0f;color:#e0e0e0;min-height:100vh}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+const quoteA = {
+  name: "Essentials MVP",
+  tag: "Recommended",
+  price: 9000,
+  timeline: "6 weeks",
+  features: [
+    { name: "NYC Interactive Map", desc: "Venue markers, user location, map navigation", price: 1800 },
+    { name: "Search & Discovery", desc: "Search bar, filters, results with photos", price: 1500 },
+    { name: "Venue Pages", desc: "Full venue info, photos, hours, location", price: 1200 },
+    { name: "Auth & Accounts", desc: "Sign up, login, email verification, password reset", price: 1200 },
+    { name: "User Profiles", desc: "Basic profile page, edit profile, avatar", price: 800 },
+    { name: "Reviews", desc: "Numerical score, text review, display on venue", price: 1000 },
+    { name: "Core Infrastructure", desc: "Database, hosting, object storage, API layer", price: 1500 },
+  ]
+};
+
+const quoteB = {
+  name: "Full Feature MVP",
+  tag: "Complete",
+  price: 14000,
+  timeline: "8–10 weeks",
+  features: [
+    { name: "NYC Interactive Map", desc: "Venue markers, user location, map navigation", price: 1800 },
+    { name: "Search & Discovery", desc: "Search bar, filters, results with photos", price: 1500 },
+    { name: "Venue Pages", desc: "Full venue info, photos, hours, location", price: 1200 },
+    { name: "Auth & Accounts", desc: "Sign up, login, email verification, password reset", price: 1200 },
+    { name: "User Profiles", desc: "Profile pages with follow system, avatar, bio", price: 1800 },
+    { name: "Reviews & Tags", desc: "Numerical score, label tagging, text review", price: 1400 },
+    { name: "Bookmarks & Lists", desc: "Bookmark venues, create/manage custom lists", price: 1600, highlight: true },
+    { name: "Activity Feed", desc: "Friends' reviews, activity stream, social layer", price: 2000, highlight: true },
+    { name: "Core Infrastructure", desc: "Database, hosting, object storage, API layer", price: 1500 },
+  ]
+};
+
+const phase2 = [
+  "Push notifications",
+  "Real-time friends map",
+  "Check-in system",
+  "Admin dashboard",
+  "AI recommendations",
+  "App Store deployment",
+];
+
+function QuoteCard({ quote, active, onClick }) {
+  const isRec = quote.tag === "Recommended";
+  return (
+    <div onClick={onClick} style={{
+      flex:1, minWidth:340, maxWidth:520,
+      background: active ? 'linear-gradient(135deg,#12121a,#1a1a2e)' : '#111118',
+      border: active ? (isRec ? '1px solid rgba(99,210,151,0.4)' : '1px solid rgba(130,130,255,0.4)') : '1px solid rgba(255,255,255,0.06)',
+      borderRadius:16, padding:'28px 24px', cursor:'pointer',
+      transition:'all 0.3s ease',
+      transform: active ? 'scale(1.01)' : 'scale(0.99)',
+      boxShadow: active ? (isRec ? '0 8px 40px rgba(99,210,151,0.08)' : '0 8px 40px rgba(130,130,255,0.08)') : 'none'
+    }}>
+      <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:6}}>
+        <span style={{
+          fontSize:10,fontWeight:600,textTransform:'uppercase',letterSpacing:1.5,
+          padding:'4px 10px',borderRadius:20,
+          background: isRec ? 'rgba(99,210,151,0.12)' : 'rgba(130,130,255,0.12)',
+          color: isRec ? '#63d297' : '#8282ff',
+        }}>{quote.tag}</span>
+      </div>
+      <h2 style={{fontSize:22,fontWeight:600,marginBottom:4,color:'#fff'}}>{quote.name}</h2>
+      <div style={{display:'flex',alignItems:'baseline',gap:8,marginBottom:4}}>
+        <span style={{fontSize:36,fontWeight:700,color:'#fff'}}>${quote.price.toLocaleString()}</span>
+        <span style={{fontSize:14,color:'rgba(255,255,255,0.4)'}}>USD</span>
+      </div>
+      <p style={{fontSize:13,color:'rgba(255,255,255,0.4)',marginBottom:20}}>
+        Timeline: {quote.timeline}
+      </p>
+      
+      <div style={{display:'flex',flexDirection:'column',gap:10}}>
+        {quote.features.map((f,i) => (
+          <div key={i} style={{
+            display:'flex',justifyContent:'space-between',alignItems:'flex-start',
+            padding:'10px 12px',borderRadius:10,
+            background: f.highlight ? 'rgba(130,130,255,0.06)' : 'rgba(255,255,255,0.02)',
+            border: f.highlight ? '1px solid rgba(130,130,255,0.15)' : '1px solid rgba(255,255,255,0.04)',
+          }}>
+            <div style={{flex:1}}>
+              <div style={{fontSize:14,fontWeight:500,color:'#fff',marginBottom:2}}>
+                {f.highlight && <span style={{color:'#8282ff',marginRight:6}}>+</span>}
+                {f.name}
+              </div>
+              <div style={{fontSize:12,color:'rgba(255,255,255,0.35)'}}>{f.desc}</div>
+            </div>
+            <div style={{fontSize:14,fontWeight:600,color:'rgba(255,255,255,0.5)',whiteSpace:'nowrap',marginLeft:12}}>
+              ${f.price.toLocaleString()}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [active, setActive] = useState('a');
+  
+  return (
+    <div style={{maxWidth:1100,margin:'0 auto',padding:'40px 20px'}}>
+      <div style={{textAlign:'center',marginBottom:40}}>
+        <div style={{fontSize:11,fontWeight:600,textTransform:'uppercase',letterSpacing:3,color:'rgba(255,255,255,0.25)',marginBottom:8}}>
+          Project Proposal
+        </div>
+        <h1 style={{fontSize:32,fontWeight:700,color:'#fff',marginBottom:6}}>
+          NYC Venue Discovery App
+        </h1>
+        <p style={{fontSize:15,color:'rgba(255,255,255,0.35)'}}>
+          Prepared by Grow Smart AI — February 2026
+        </p>
+      </div>
+
+      <div style={{display:'flex',gap:20,flexWrap:'wrap',justifyContent:'center',marginBottom:40}}>
+        <QuoteCard quote={quoteA} active={active==='a'} onClick={()=>setActive('a')} />
+        <QuoteCard quote={quoteB} active={active==='b'} onClick={()=>setActive('b')} />
+      </div>
+
+      <div style={{
+        maxWidth:520,margin:'0 auto',
+        background:'#111118',border:'1px solid rgba(255,255,255,0.06)',
+        borderRadius:16,padding:'24px'
+      }}>
+        <h3 style={{fontSize:16,fontWeight:600,color:'#fff',marginBottom:4}}>Phase 2 Expansion</h3>
+        <p style={{fontSize:12,color:'rgba(255,255,255,0.3)',marginBottom:16}}>
+          Available after MVP launch — priced separately
+        </p>
+        <div style={{display:'flex',flexWrap:'wrap',gap:8}}>
+          {phase2.map((item,i) => (
+            <span key={i} style={{
+              fontSize:12,padding:'6px 12px',borderRadius:20,
+              background:'rgba(255,255,255,0.04)',
+              border:'1px solid rgba(255,255,255,0.08)',
+              color:'rgba(255,255,255,0.45)'
+            }}>{item}</span>
+          ))}
+        </div>
+      </div>
+
+      <div style={{
+        maxWidth:520,margin:'24px auto 0',
+        background:'rgba(99,210,151,0.04)',border:'1px solid rgba(99,210,151,0.12)',
+        borderRadius:16,padding:'20px 24px'
+      }}>
+        <h3 style={{fontSize:14,fontWeight:600,color:'#63d297',marginBottom:8}}>Payment Terms</h3>
+        <div style={{fontSize:13,color:'rgba(255,255,255,0.5)',lineHeight:1.8}}>
+          50% upfront to secure start date<br/>
+          50% on delivery & approval
+        </div>
+      </div>
+
+      <div style={{textAlign:'center',marginTop:40,paddingTop:20,borderTop:'1px solid rgba(255,255,255,0.06)'}}>
+        <div style={{fontSize:12,color:'rgba(255,255,255,0.2)',letterSpacing:1}}>
+          GROW SMART AI — growsmartai.co.uk
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
