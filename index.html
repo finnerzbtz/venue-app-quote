@@ -18,6 +18,23 @@ body{font-family:'Inter',sans-serif;background:#0a0a0f;color:#e0e0e0;min-height:
 <script type="text/babel">
 const { useState } = React;
 
+const quoteOriginal = {
+  name: "Original Quote",
+  tag: "Previous",
+  price: 13400,
+  timeline: "2 months",
+  features: [
+    { name: "Interactive NYC Map", desc: "Map with user location indicator" },
+    { name: "Venue Heat Markers", desc: "Animated thermal dots on map" },
+    { name: "Marker Clustering", desc: "Supercluster grouping for dense areas" },
+    { name: "Venue Detail Sheets", desc: "Bottom sheet with venue info" },
+    { name: "Venue Search", desc: "Local filtering with photo results" },
+    { name: "Search-to-Map Navigation", desc: "Jump from results to map pin" },
+    { name: "Venue Rating System", desc: "Basic numerical ratings" },
+    { name: "Auth & Accounts", desc: "Sign up, login, user accounts" },
+  ]
+};
+
 const quoteA = {
   name: "Essentials MVP",
   tag: "Recommended",
@@ -52,6 +69,26 @@ const quoteB = {
   ]
 };
 
+const comparisonFeatures = [
+  { name: "Interactive NYC Map",        orig: true,  ess: true,  full: true },
+  { name: "Venue Markers",              orig: true,  ess: true,  full: true },
+  { name: "User Location",              orig: true,  ess: true,  full: true },
+  { name: "Heat Markers & Clustering",  orig: true,  ess: false, full: false },
+  { name: "Search-to-Map Navigation",   orig: true,  ess: false, full: false },
+  { name: "Venue Search & Filters",     orig: true,  ess: true,  full: true },
+  { name: "Search Results with Photos",  orig: true,  ess: true,  full: true },
+  { name: "Venue Pages (full info)",     orig: false, ess: true,  full: true },
+  { name: "Auth & Accounts",            orig: true,  ess: true,  full: true },
+  { name: "Email Verification & Reset",  orig: false, ess: true,  full: true },
+  { name: "User Profiles",              orig: false, ess: true,  full: true },
+  { name: "Basic Rating System",        orig: true,  ess: true,  full: true },
+  { name: "Label Tagging on Reviews",   orig: false, ess: false, full: true },
+  { name: "Bookmark (save without review)", orig: false, ess: false, full: true },
+  { name: "Custom Venue Lists",         orig: false, ess: false, full: true },
+  { name: "Activity Feed",              orig: false, ess: false, full: true },
+  { name: "Core Infrastructure",        orig: false, ess: true,  full: true },
+];
+
 const addons = [
   { name: "Follow System & Social Profiles", desc: "Follow other users, view their profiles, friend-based activity feed", price: 2500 },
   { name: "Social Activity Feed", desc: "Upgrade global feed to friends-only feed with social interactions", price: 1500 },
@@ -68,49 +105,54 @@ const phase2 = [
   "Heat markers & clustering",
 ];
 
+function Tick() {
+  return <span style={{color:'#63d297',fontSize:18,fontWeight:700}}>✓</span>;
+}
+function Cross() {
+  return <span style={{color:'rgba(255,255,255,0.15)',fontSize:18,fontWeight:700}}>✗</span>;
+}
+
 function QuoteCard({ quote, active, onClick }) {
-  const isRec = quote.tag === "Recommended";
+  const colors = {
+    "Recommended": { bg: 'rgba(99,210,151,0.12)', color: '#63d297', border: 'rgba(99,210,151,0.4)', shadow: 'rgba(99,210,151,0.08)' },
+    "Your Brief": { bg: 'rgba(130,130,255,0.12)', color: '#8282ff', border: 'rgba(130,130,255,0.4)', shadow: 'rgba(130,130,255,0.08)' },
+    "Previous": { bg: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)', border: 'rgba(255,255,255,0.2)', shadow: 'rgba(255,255,255,0.04)' },
+  };
+  const c = colors[quote.tag] || colors["Previous"];
   return (
     <div onClick={onClick} style={{
-      flex:1, minWidth:340, maxWidth:520,
+      flex:1, minWidth:300, maxWidth:360,
       background: active ? 'linear-gradient(135deg,#12121a,#1a1a2e)' : '#111118',
-      border: active ? (isRec ? '1px solid rgba(99,210,151,0.4)' : '1px solid rgba(130,130,255,0.4)') : '1px solid rgba(255,255,255,0.06)',
-      borderRadius:16, padding:'28px 24px', cursor:'pointer',
+      border: active ? `1px solid ${c.border}` : '1px solid rgba(255,255,255,0.06)',
+      borderRadius:16, padding:'24px 20px', cursor:'pointer',
       transition:'all 0.3s ease',
       transform: active ? 'scale(1.01)' : 'scale(0.99)',
-      boxShadow: active ? (isRec ? '0 8px 40px rgba(99,210,151,0.08)' : '0 8px 40px rgba(130,130,255,0.08)') : 'none'
+      boxShadow: active ? `0 8px 40px ${c.shadow}` : 'none'
     }}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:6}}>
         <span style={{
           fontSize:10,fontWeight:600,textTransform:'uppercase',letterSpacing:1.5,
           padding:'4px 10px',borderRadius:20,
-          background: isRec ? 'rgba(99,210,151,0.12)' : 'rgba(130,130,255,0.12)',
-          color: isRec ? '#63d297' : '#8282ff',
+          background: c.bg, color: c.color,
         }}>{quote.tag}</span>
       </div>
-      <h2 style={{fontSize:22,fontWeight:600,marginBottom:4,color:'#fff'}}>{quote.name}</h2>
+      <h2 style={{fontSize:20,fontWeight:600,marginBottom:4,color:'#fff'}}>{quote.name}</h2>
       <div style={{display:'flex',alignItems:'baseline',gap:8,marginBottom:4}}>
-        <span style={{fontSize:36,fontWeight:700,color:'#fff'}}>${quote.price.toLocaleString()}</span>
-        <span style={{fontSize:14,color:'rgba(255,255,255,0.4)'}}>USD</span>
+        <span style={{fontSize:32,fontWeight:700,color:'#fff'}}>${quote.price.toLocaleString()}</span>
+        <span style={{fontSize:13,color:'rgba(255,255,255,0.4)'}}>USD</span>
       </div>
-      <p style={{fontSize:13,color:'rgba(255,255,255,0.4)',marginBottom:20}}>
+      <p style={{fontSize:13,color:'rgba(255,255,255,0.4)',marginBottom:16}}>
         Timeline: {quote.timeline}
       </p>
-      
-      <div style={{display:'flex',flexDirection:'column',gap:10}}>
+      <div style={{display:'flex',flexDirection:'column',gap:8}}>
         {quote.features.map((f,i) => (
           <div key={i} style={{
-            display:'flex',justifyContent:'space-between',alignItems:'flex-start',
-            padding:'10px 12px',borderRadius:10,
+            padding:'8px 10px',borderRadius:8,
             background:'rgba(255,255,255,0.02)',
             border:'1px solid rgba(255,255,255,0.04)',
           }}>
-            <div style={{flex:1}}>
-              <div style={{fontSize:14,fontWeight:500,color:'#fff',marginBottom:2}}>
-                {f.name}
-              </div>
-              <div style={{fontSize:12,color:'rgba(255,255,255,0.35)'}}>{f.desc}</div>
-            </div>
+            <div style={{fontSize:13,fontWeight:500,color:'#fff',marginBottom:1}}>{f.name}</div>
+            <div style={{fontSize:11,color:'rgba(255,255,255,0.3)'}}>{f.desc}</div>
           </div>
         ))}
       </div>
@@ -122,7 +164,7 @@ function App() {
   const [active, setActive] = useState('a');
   
   return (
-    <div style={{maxWidth:1100,margin:'0 auto',padding:'40px 20px'}}>
+    <div style={{maxWidth:1200,margin:'0 auto',padding:'40px 20px'}}>
       <div style={{textAlign:'center',marginBottom:40}}>
         <div style={{fontSize:11,fontWeight:600,textTransform:'uppercase',letterSpacing:3,color:'rgba(255,255,255,0.25)',marginBottom:8}}>
           Project Proposal
@@ -135,13 +177,50 @@ function App() {
         </p>
       </div>
 
-      <div style={{display:'flex',gap:20,flexWrap:'wrap',justifyContent:'center',marginBottom:40}}>
+      <div style={{display:'flex',gap:16,flexWrap:'wrap',justifyContent:'center',marginBottom:50}}>
+        <QuoteCard quote={quoteOriginal} active={active==='orig'} onClick={()=>setActive('orig')} />
         <QuoteCard quote={quoteA} active={active==='a'} onClick={()=>setActive('a')} />
         <QuoteCard quote={quoteB} active={active==='b'} onClick={()=>setActive('b')} />
       </div>
 
+      {/* Comparison Grid */}
       <div style={{
-        maxWidth:1060,margin:'0 auto 40px',
+        maxWidth:800,margin:'0 auto 50px',
+        background:'#111118',border:'1px solid rgba(255,255,255,0.06)',
+        borderRadius:16,padding:'24px',overflowX:'auto'
+      }}>
+        <h3 style={{fontSize:16,fontWeight:600,color:'#fff',marginBottom:20}}>Feature Comparison</h3>
+        <table style={{width:'100%',borderCollapse:'collapse'}}>
+          <thead>
+            <tr>
+              <th style={{textAlign:'left',padding:'10px 12px',fontSize:13,fontWeight:500,color:'rgba(255,255,255,0.4)',borderBottom:'1px solid rgba(255,255,255,0.08)'}}>Feature</th>
+              <th style={{textAlign:'center',padding:'10px 12px',fontSize:12,fontWeight:600,color:'rgba(255,255,255,0.5)',borderBottom:'1px solid rgba(255,255,255,0.08)',whiteSpace:'nowrap'}}>Original<br/><span style={{color:'rgba(255,255,255,0.3)',fontWeight:400}}>$13,400</span></th>
+              <th style={{textAlign:'center',padding:'10px 12px',fontSize:12,fontWeight:600,color:'#63d297',borderBottom:'1px solid rgba(255,255,255,0.08)',whiteSpace:'nowrap'}}>Essentials<br/><span style={{fontWeight:400}}>$9,000</span></th>
+              <th style={{textAlign:'center',padding:'10px 12px',fontSize:12,fontWeight:600,color:'#8282ff',borderBottom:'1px solid rgba(255,255,255,0.08)',whiteSpace:'nowrap'}}>Full Feature<br/><span style={{fontWeight:400}}>$14,000</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {comparisonFeatures.map((f,i) => (
+              <tr key={i} style={{borderBottom:'1px solid rgba(255,255,255,0.04)'}}>
+                <td style={{padding:'10px 12px',fontSize:13,color:'rgba(255,255,255,0.7)'}}>{f.name}</td>
+                <td style={{textAlign:'center',padding:'10px 12px'}}>{f.orig ? <Tick/> : <Cross/>}</td>
+                <td style={{textAlign:'center',padding:'10px 12px'}}>{f.ess ? <Tick/> : <Cross/>}</td>
+                <td style={{textAlign:'center',padding:'10px 12px'}}>{f.full ? <Tick/> : <Cross/>}</td>
+              </tr>
+            ))}
+            <tr style={{borderTop:'2px solid rgba(255,255,255,0.1)'}}>
+              <td style={{padding:'12px',fontSize:14,fontWeight:600,color:'#fff'}}>Total Features</td>
+              <td style={{textAlign:'center',padding:'12px',fontSize:14,fontWeight:600,color:'rgba(255,255,255,0.5)'}}>{comparisonFeatures.filter(f=>f.orig).length}</td>
+              <td style={{textAlign:'center',padding:'12px',fontSize:14,fontWeight:600,color:'#63d297'}}>{comparisonFeatures.filter(f=>f.ess).length}</td>
+              <td style={{textAlign:'center',padding:'12px',fontSize:14,fontWeight:600,color:'#8282ff'}}>{comparisonFeatures.filter(f=>f.full).length}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* Add-Ons */}
+      <div style={{
+        maxWidth:800,margin:'0 auto 40px',
         background:'#111118',border:'1px solid rgba(255,180,50,0.15)',
         borderRadius:16,padding:'24px'
       }}>
@@ -171,8 +250,9 @@ function App() {
         </div>
       </div>
 
+      {/* Phase 2 */}
       <div style={{
-        maxWidth:1060,margin:'0 auto',
+        maxWidth:800,margin:'0 auto',
         background:'#111118',border:'1px solid rgba(255,255,255,0.06)',
         borderRadius:16,padding:'24px'
       }}>
