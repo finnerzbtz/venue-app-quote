@@ -24,13 +24,13 @@ const quoteA = {
   price: 9000,
   timeline: "6 weeks",
   features: [
-    { name: "NYC Interactive Map", desc: "Venue markers, user location, map navigation", price: 1800 },
-    { name: "Search & Discovery", desc: "Search bar, filters, results with photos", price: 1500 },
-    { name: "Venue Pages", desc: "Full venue info, photos, hours, location", price: 1200 },
-    { name: "Auth & Accounts", desc: "Sign up, login, email verification, password reset", price: 1200 },
-    { name: "User Profiles", desc: "Basic profile page, edit profile, avatar", price: 800 },
-    { name: "Reviews", desc: "Numerical score, text review, display on venue", price: 1000 },
-    { name: "Core Infrastructure", desc: "Database, hosting, object storage, API layer", price: 1500 },
+    { name: "NYC Interactive Map", desc: "Venue markers, user location, map navigation" },
+    { name: "Search & Discovery", desc: "Search bar, filters, results with photos" },
+    { name: "Venue Pages", desc: "Full venue info, photos, hours, location" },
+    { name: "Auth & Accounts", desc: "Sign up, login, email verification, password reset" },
+    { name: "User Profiles", desc: "Basic profile page, edit profile, avatar" },
+    { name: "Reviews", desc: "Numerical score, text review, display on venue" },
+    { name: "Core Infrastructure", desc: "Database, hosting, object storage, API layer" },
   ]
 };
 
@@ -40,15 +40,15 @@ const quoteB = {
   price: 14000,
   timeline: "8–10 weeks",
   features: [
-    { name: "NYC Interactive Map", desc: "Venue markers, user location, map navigation", price: 1800 },
-    { name: "Search & Discovery", desc: "Search bar, filters, results with photos", price: 1500 },
-    { name: "Venue Pages", desc: "Full venue info, photos, hours, location", price: 1200 },
-    { name: "Auth & Accounts", desc: "Sign up, login, email verification, password reset", price: 1200 },
-    { name: "User Profiles", desc: "Profile pages with follow system, avatar, bio", price: 1800 },
-    { name: "Reviews & Tags", desc: "Numerical score, label tagging, text review", price: 1400 },
-    { name: "Bookmarks & Lists", desc: "Bookmark venues, create/manage custom lists", price: 1600, highlight: true },
-    { name: "Activity Feed", desc: "Friends' reviews, activity stream, social layer", price: 2000, highlight: true },
-    { name: "Core Infrastructure", desc: "Database, hosting, object storage, API layer", price: 1500 },
+    { name: "NYC Interactive Map", desc: "Venue markers, user location, map navigation" },
+    { name: "Search & Discovery", desc: "Search bar, filters, results with photos" },
+    { name: "Venue Pages", desc: "Full venue info, photos, hours, location" },
+    { name: "Auth & Accounts", desc: "Sign up, login, email verification, password reset" },
+    { name: "User Profiles", desc: "Profile pages with follow system, avatar, bio" },
+    { name: "Reviews & Tags", desc: "Numerical score, label tagging, text review" },
+    { name: "Bookmarks & Lists", desc: "Bookmark venues, create/manage custom lists", highlight: true },
+    { name: "Activity Feed", desc: "Friends' reviews, activity stream, social layer", highlight: true },
+    { name: "Core Infrastructure", desc: "Database, hosting, object storage, API layer" },
   ]
 };
 
@@ -104,9 +104,6 @@ function QuoteCard({ quote, active, onClick }) {
                 {f.name}
               </div>
               <div style={{fontSize:12,color:'rgba(255,255,255,0.35)'}}>{f.desc}</div>
-            </div>
-            <div style={{fontSize:14,fontWeight:600,color:'rgba(255,255,255,0.5)',whiteSpace:'nowrap',marginLeft:12}}>
-              ${f.price.toLocaleString()}
             </div>
           </div>
         ))}
