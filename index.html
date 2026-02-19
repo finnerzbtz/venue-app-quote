@@ -162,6 +162,11 @@ function QuoteCard({ quote, active, onClick }) {
 
 function App() {
   const [active, setActive] = useState('a');
+  const [grid, setGrid] = useState(comparisonFeatures.map(f => ({...f})));
+  
+  const toggle = (i, col) => {
+    setGrid(prev => prev.map((f,j) => j===i ? {...f, [col]: !f[col]} : f));
+  };
   
   return (
     <div style={{maxWidth:1200,margin:'0 auto',padding:'40px 20px'}}>
@@ -200,19 +205,19 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            {comparisonFeatures.map((f,i) => (
+            {grid.map((f,i) => (
               <tr key={i} style={{borderBottom:'1px solid rgba(255,255,255,0.04)'}}>
                 <td style={{padding:'10px 12px',fontSize:13,color:'rgba(255,255,255,0.7)'}}>{f.name}</td>
-                <td style={{textAlign:'center',padding:'10px 12px'}}>{f.orig ? <Tick/> : <Cross/>}</td>
-                <td style={{textAlign:'center',padding:'10px 12px'}}>{f.ess ? <Tick/> : <Cross/>}</td>
-                <td style={{textAlign:'center',padding:'10px 12px'}}>{f.full ? <Tick/> : <Cross/>}</td>
+                <td onClick={()=>toggle(i,'orig')} style={{textAlign:'center',padding:'10px 12px',cursor:'pointer',userSelect:'none',transition:'transform 0.15s'}}>{f.orig ? <Tick/> : <Cross/>}</td>
+                <td onClick={()=>toggle(i,'ess')} style={{textAlign:'center',padding:'10px 12px',cursor:'pointer',userSelect:'none',transition:'transform 0.15s'}}>{f.ess ? <Tick/> : <Cross/>}</td>
+                <td onClick={()=>toggle(i,'full')} style={{textAlign:'center',padding:'10px 12px',cursor:'pointer',userSelect:'none',transition:'transform 0.15s'}}>{f.full ? <Tick/> : <Cross/>}</td>
               </tr>
             ))}
             <tr style={{borderTop:'2px solid rgba(255,255,255,0.1)'}}>
               <td style={{padding:'12px',fontSize:14,fontWeight:600,color:'#fff'}}>Total Features</td>
-              <td style={{textAlign:'center',padding:'12px',fontSize:14,fontWeight:600,color:'rgba(255,255,255,0.5)'}}>{comparisonFeatures.filter(f=>f.orig).length}</td>
-              <td style={{textAlign:'center',padding:'12px',fontSize:14,fontWeight:600,color:'#63d297'}}>{comparisonFeatures.filter(f=>f.ess).length}</td>
-              <td style={{textAlign:'center',padding:'12px',fontSize:14,fontWeight:600,color:'#8282ff'}}>{comparisonFeatures.filter(f=>f.full).length}</td>
+              <td style={{textAlign:'center',padding:'12px',fontSize:14,fontWeight:600,color:'rgba(255,255,255,0.5)'}}>{grid.filter(f=>f.orig).length}</td>
+              <td style={{textAlign:'center',padding:'12px',fontSize:14,fontWeight:600,color:'#63d297'}}>{grid.filter(f=>f.ess).length}</td>
+              <td style={{textAlign:'center',padding:'12px',fontSize:14,fontWeight:600,color:'#8282ff'}}>{grid.filter(f=>f.full).length}</td>
             </tr>
           </tbody>
         </table>
