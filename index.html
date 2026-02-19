@@ -36,29 +36,36 @@ const quoteA = {
 
 const quoteB = {
   name: "Full Feature MVP",
-  tag: "Complete",
+  tag: "Your Brief",
   price: 14000,
   timeline: "8–10 weeks",
   features: [
     { name: "NYC Interactive Map", desc: "Venue markers, user location, map navigation" },
-    { name: "Search & Discovery", desc: "Search bar, filters, results with photos" },
+    { name: "Search & Discovery", desc: "Search bar, filters, venue results with photos (Resy-style)" },
     { name: "Venue Pages", desc: "Full venue info, photos, hours, location" },
     { name: "Auth & Accounts", desc: "Sign up, login, email verification, password reset" },
-    { name: "User Profiles", desc: "Profile pages with follow system, avatar, bio" },
-    { name: "Reviews & Tags", desc: "Numerical score, label tagging, text review" },
-    { name: "Bookmarks & Lists", desc: "Bookmark venues, create/manage custom lists", highlight: true },
-    { name: "Activity Feed", desc: "Friends' reviews, activity stream, social layer", highlight: true },
+    { name: "User Profiles", desc: "Profile page, avatar, bio, view your reviews & lists" },
+    { name: "Reviews & Tags", desc: "Numerical score, optional label tagging, bookmark as alternative" },
+    { name: "Custom Lists", desc: "Create, save, and manage personal venue lists" },
+    { name: "Activity Feed", desc: "Global feed of recent reviews and activity" },
     { name: "Core Infrastructure", desc: "Database, hosting, object storage, API layer" },
   ]
 };
 
+const addons = [
+  { name: "Follow System & Social Profiles", desc: "Follow other users, view their profiles, friend-based activity feed", price: 2500 },
+  { name: "Social Activity Feed", desc: "Upgrade global feed to friends-only feed with social interactions", price: 1500 },
+  { name: "Push Notifications", desc: "Real-time alerts for reviews, follows, and activity", price: 1200 },
+  { name: "App Store Deployment", desc: "Full iOS & Android setup, submission, and approval", price: 1500 },
+];
+
 const phase2 = [
-  "Push notifications",
   "Real-time friends map",
   "Check-in system",
   "Admin dashboard",
   "AI recommendations",
-  "App Store deployment",
+  "Venue owner profiles",
+  "Heat markers & clustering",
 ];
 
 function QuoteCard({ quote, active, onClick }) {
@@ -95,12 +102,11 @@ function QuoteCard({ quote, active, onClick }) {
           <div key={i} style={{
             display:'flex',justifyContent:'space-between',alignItems:'flex-start',
             padding:'10px 12px',borderRadius:10,
-            background: f.highlight ? 'rgba(130,130,255,0.06)' : 'rgba(255,255,255,0.02)',
-            border: f.highlight ? '1px solid rgba(130,130,255,0.15)' : '1px solid rgba(255,255,255,0.04)',
+            background:'rgba(255,255,255,0.02)',
+            border:'1px solid rgba(255,255,255,0.04)',
           }}>
             <div style={{flex:1}}>
               <div style={{fontSize:14,fontWeight:500,color:'#fff',marginBottom:2}}>
-                {f.highlight && <span style={{color:'#8282ff',marginRight:6}}>+</span>}
                 {f.name}
               </div>
               <div style={{fontSize:12,color:'rgba(255,255,255,0.35)'}}>{f.desc}</div>
@@ -135,7 +141,38 @@ function App() {
       </div>
 
       <div style={{
-        maxWidth:520,margin:'0 auto',
+        maxWidth:1060,margin:'0 auto 40px',
+        background:'#111118',border:'1px solid rgba(255,180,50,0.15)',
+        borderRadius:16,padding:'24px'
+      }}>
+        <h3 style={{fontSize:16,fontWeight:600,color:'#ffb432',marginBottom:4}}>Optional Add-Ons</h3>
+        <p style={{fontSize:12,color:'rgba(255,255,255,0.3)',marginBottom:16}}>
+          Can be added to either tier — scope to be confirmed
+        </p>
+        <div style={{display:'flex',flexDirection:'column',gap:10}}>
+          {addons.map((a,i) => (
+            <div key={i} style={{
+              display:'flex',justifyContent:'space-between',alignItems:'flex-start',
+              padding:'12px 14px',borderRadius:10,
+              background:'rgba(255,180,50,0.04)',
+              border:'1px solid rgba(255,180,50,0.1)',
+            }}>
+              <div style={{flex:1}}>
+                <div style={{fontSize:14,fontWeight:500,color:'#fff',marginBottom:2}}>
+                  {a.name}
+                </div>
+                <div style={{fontSize:12,color:'rgba(255,255,255,0.35)'}}>{a.desc}</div>
+              </div>
+              <div style={{fontSize:14,fontWeight:600,color:'#ffb432',whiteSpace:'nowrap',marginLeft:12}}>
+                +${a.price.toLocaleString()}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{
+        maxWidth:1060,margin:'0 auto',
         background:'#111118',border:'1px solid rgba(255,255,255,0.06)',
         borderRadius:16,padding:'24px'
       }}>
