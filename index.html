@@ -95,6 +95,7 @@ const builderFeatures = [
   { id: "venues",    name: "Venue Pages",                  desc: "Full venue info, photos, hours, location",              price: 1200, core: true },
   { id: "auth",      name: "Auth & Accounts",              desc: "Sign up, login, email verification, password reset",    price: 1200, core: true },
   { id: "infra",     name: "Core Infrastructure",          desc: "Database, hosting, object storage, API layer",          price: 1500, core: true },
+  { id: "appstore",  name: "App Store Deployment",          desc: "Full iOS & Android setup, submission, and approval",    price: 0,    core: true },
   { id: "profiles",  name: "User Profiles",                desc: "Profile page, avatar, bio, view reviews & lists",       price: 800,  core: false },
   { id: "reviews",   name: "Basic Reviews",                desc: "Numerical score, text review, display on venue",        price: 1000, core: false },
   { id: "tags",      name: "Label Tagging on Reviews",     desc: "Optional label tags on reviews",                        price: 800,  core: false },
@@ -105,7 +106,6 @@ const builderFeatures = [
   { id: "mapnav",    name: "Search-to-Map Navigation",     desc: "Jump from search results to map pin",                   price: 600,  core: false },
   { id: "follow",    name: "Follow System & Social",       desc: "Follow users, view their profiles, social feed",        price: 2500, core: false },
   { id: "push",      name: "Push Notifications",           desc: "Real-time alerts for reviews, follows, activity",       price: 1200, core: false },
-  { id: "appstore",  name: "App Store Deployment",         desc: "Full iOS & Android setup, submission, approval",        price: 1500, core: false },
 ];
 
 const phase2 = [
@@ -321,7 +321,7 @@ function App() {
                   </div>
                 </div>
                 <div style={{fontSize:14,fontWeight:600,color: on ? '#00c896' : 'rgba(255,255,255,0.25)',whiteSpace:'nowrap',marginLeft:12}}>
-                  ${f.price.toLocaleString()}
+                  {f.price === 0 ? 'Included' : `$${f.price.toLocaleString()}`}
                 </div>
               </div>
             );
