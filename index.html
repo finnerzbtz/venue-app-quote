@@ -35,85 +35,80 @@ const quoteOriginal = {
   ]
 };
 
-const quoteA = {
-  name: "Essentials MVP",
-  tag: "Recommended",
-  price: 9000,
-  timeline: "6 weeks",
-  features: [
-    { name: "NYC Interactive Map", desc: "Venue markers, user location, map navigation" },
-    { name: "Search & Discovery", desc: "Search bar, filters, results with photos" },
-    { name: "Venue Pages", desc: "Full venue info, photos, hours, location" },
-    { name: "Auth & Accounts", desc: "Sign up, login, email verification, password reset" },
-    { name: "User Profiles", desc: "Basic profile page, edit profile, avatar" },
-    { name: "Reviews", desc: "Numerical score, text review, display on venue" },
-    { name: "Core Infrastructure", desc: "Database, hosting, object storage, API layer" },
-  ]
-};
-
-const quoteB = {
-  name: "Full Feature MVP",
-  tag: "Your Brief",
-  price: 14000,
+const quoteAgreed = {
+  name: "Agreed MVP",
+  tag: "Confirmed",
+  price: 13400,
   timeline: "8–10 weeks",
   features: [
     { name: "NYC Interactive Map", desc: "Venue markers, user location, map navigation" },
     { name: "Search & Discovery", desc: "Search bar, filters, venue results with photos (Resy-style)" },
-    { name: "Venue Pages", desc: "Full venue info, photos, hours, location" },
+    { name: "Venue Pages", desc: "Full venue info, photos, hours, Google ratings on launch" },
     { name: "Auth & Accounts", desc: "Sign up, login, email verification, password reset" },
-    { name: "User Profiles", desc: "Profile page, avatar, bio, view your reviews & lists" },
+    { name: "User Profiles & Follows", desc: "Profile page, avatar, bio, follower/following counts, follow system" },
     { name: "Reviews & Tags", desc: "Numerical score, optional label tagging, bookmark as alternative" },
     { name: "Custom Lists", desc: "Create, save, and manage personal venue lists" },
-    { name: "Activity Feed", desc: "Global feed of recent reviews and activity" },
-    { name: "Core Infrastructure", desc: "Database, hosting, object storage, API layer" },
+    { name: "Notification Bell", desc: "Activity notifications from follows and reviews (replaces full feed)" },
+    { name: "Core Infrastructure", desc: "Database (Supabase), hosting, object storage, API layer" },
+    { name: "App Store Deployment", desc: "Full iOS & Android setup, submission, and approval" },
   ]
 };
 
 const comparisonFeatures = [
-  { name: "Interactive NYC Map",        orig: true,  ess: true,  full: true },
-  { name: "Venue Markers",              orig: true,  ess: true,  full: true },
-  { name: "User Location",              orig: true,  ess: true,  full: true },
-  { name: "Heat Markers & Clustering",  orig: true,  ess: false, full: false },
-  { name: "Search-to-Map Navigation",   orig: true,  ess: false, full: false },
-  { name: "Venue Search & Filters",     orig: true,  ess: true,  full: true },
-  { name: "Search Results with Photos", orig: true,  ess: true,  full: true },
-  { name: "Venue Pages (full info)",    orig: false, ess: true,  full: true },
-  { name: "Auth & Accounts",           orig: true,  ess: true,  full: true },
-  { name: "Email Verification & Reset", orig: false, ess: true,  full: true },
-  { name: "User Profiles",             orig: false, ess: true,  full: true },
-  { name: "Basic Rating System",       orig: true,  ess: true,  full: true },
-  { name: "Label Tagging on Reviews",  orig: false, ess: false, full: true },
-  { name: "Bookmark (save without review)", orig: false, ess: false, full: true },
-  { name: "Custom Venue Lists",        orig: false, ess: false, full: true },
-  { name: "Activity Feed",             orig: false, ess: false, full: true },
-  { name: "Core Infrastructure",       orig: false, ess: true,  full: true },
+  { name: "Interactive NYC Map",             orig: true,  agreed: true },
+  { name: "Venue Markers",                   orig: true,  agreed: true },
+  { name: "User Location",                   orig: true,  agreed: true },
+  { name: "Heat Markers & Clustering",       orig: true,  agreed: false },
+  { name: "Search-to-Map Navigation",        orig: true,  agreed: false },
+  { name: "Venue Search & Filters",          orig: true,  agreed: true },
+  { name: "Search Results with Photos",      orig: true,  agreed: true },
+  { name: "Venue Pages (full info)",         orig: false, agreed: true },
+  { name: "Google Ratings (launch data)",    orig: false, agreed: true },
+  { name: "Auth & Accounts",                orig: true,  agreed: true },
+  { name: "Email Verification & Reset",     orig: false, agreed: true },
+  { name: "User Profiles",                  orig: false, agreed: true },
+  { name: "Follow System & Counts",         orig: false, agreed: true },
+  { name: "Basic Rating System",            orig: true,  agreed: true },
+  { name: "Label Tagging on Reviews",       orig: false, agreed: true },
+  { name: "Bookmark (save without review)", orig: false, agreed: true },
+  { name: "Custom Venue Lists",             orig: false, agreed: true },
+  { name: "Notification Bell",              orig: false, agreed: true },
+  { name: "Core Infrastructure",            orig: false, agreed: true },
+  { name: "App Store Deployment",           orig: false, agreed: true },
 ];
 
 const builderFeatures = [
   { id: "map",       name: "Interactive NYC Map",          desc: "Venue markers, user location, navigation",              price: 1800, core: true },
   { id: "search",    name: "Search & Discovery",           desc: "Search bar, filters, results with photos",              price: 1500, core: true },
-  { id: "venues",    name: "Venue Pages",                  desc: "Full venue info, photos, hours, location",              price: 1200, core: true },
+  { id: "venues",    name: "Venue Pages",                  desc: "Full venue info, photos, hours, Google ratings",        price: 1200, core: true },
   { id: "auth",      name: "Auth & Accounts",              desc: "Sign up, login, email verification, password reset",    price: 1200, core: true },
-  { id: "infra",     name: "Core Infrastructure",          desc: "Database, hosting, object storage, API layer",          price: 1500, core: true },
-  { id: "appstore",  name: "App Store Deployment",          desc: "Full iOS & Android setup, submission, and approval",    price: 0,    core: true },
-  { id: "profiles",  name: "User Profiles",                desc: "Profile page, avatar, bio, view reviews & lists",       price: 800,  core: false },
-  { id: "reviews",   name: "Basic Reviews",                desc: "Numerical score, text review, display on venue",        price: 1000, core: false },
-  { id: "tags",      name: "Label Tagging on Reviews",     desc: "Optional label tags on reviews",                        price: 800,  core: false },
-  { id: "bookmark",  name: "Bookmark / Save",              desc: "Bookmark venues as alternative to reviewing",           price: 700,  core: false },
-  { id: "lists",     name: "Custom Venue Lists",           desc: "Create, save, and manage personal lists",               price: 1500, core: false },
-  { id: "feed",      name: "Activity Feed",                desc: "Global feed of recent reviews and activity",            price: 2000, core: false },
-  { id: "heat",      name: "Heat Markers & Clustering",    desc: "Animated thermal dots, supercluster grouping",          price: 1000, core: false },
-  { id: "mapnav",    name: "Search-to-Map Navigation",     desc: "Jump from search results to map pin",                   price: 600,  core: false },
-  { id: "follow",    name: "Follow System & Social",       desc: "Follow users, view their profiles, social feed",        price: 2500, core: false },
-  { id: "push",      name: "Push Notifications",           desc: "Real-time alerts for reviews, follows, activity",       price: 1200, core: false },
+  { id: "infra",     name: "Core Infrastructure",          desc: "Database (Supabase), hosting, object storage, API",     price: 1500, core: true },
+  { id: "appstore",  name: "App Store Deployment",         desc: "Full iOS & Android setup, submission, and approval",    price: 0,    core: true },
+  { id: "profiles",  name: "User Profiles & Follows",      desc: "Profile page, avatar, bio, follow system, follower/following counts", price: 1500, core: false, default: true },
+  { id: "reviews",   name: "Basic Reviews",                desc: "Numerical score, text review, display on venue",        price: 1000, core: false, default: true },
+  { id: "tags",      name: "Label Tagging on Reviews",     desc: "Optional label tags on reviews",                        price: 800,  core: false, default: true },
+  { id: "bookmark",  name: "Bookmark / Save",              desc: "Bookmark venues as alternative to reviewing",           price: 700,  core: false, default: true },
+  { id: "lists",     name: "Custom Venue Lists",           desc: "Create, save, and manage personal lists",               price: 1500, core: false, default: true },
+  { id: "bell",      name: "Notification Bell",            desc: "Activity notifications from follows and reviews",       price: 700,  core: false, default: true },
+  { id: "heat",      name: "Heat Markers & Clustering",    desc: "Animated thermal dots, supercluster grouping",          price: 1000, core: false, default: false },
+  { id: "mapnav",    name: "Search-to-Map Navigation",     desc: "Jump from search results to map pin",                   price: 600,  core: false, default: false },
+  { id: "feed",      name: "Full Activity Feed",           desc: "Scrollable feed of friends' reviews and activity",      price: 2000, core: false, default: false },
+  { id: "push",      name: "Push Notifications",           desc: "Real-time native push alerts",                          price: 1200, core: false, default: false },
 ];
 
 const phase2 = [
+  "Full activity feed",
   "Real-time friends map",
   "Check-in system",
   "Admin dashboard",
   "AI recommendations",
   "Venue owner profiles",
+];
+
+const paymentSchedule = [
+  { phase: "Design Phase", pct: "25%", amount: 3350, trigger: "On signing" },
+  { phase: "Build Phase", pct: "25%", amount: 3350, trigger: "Design sign-off" },
+  { phase: "Delivery & Launch", pct: "50%", amount: 6700, trigger: "QA complete + launch" },
 ];
 
 function Tick() {
@@ -125,14 +120,13 @@ function Cross() {
 
 function QuoteCard({ quote, active, onClick }) {
   const colors = {
-    "Recommended": { bg: 'rgba(99,210,151,0.12)', color: '#63d297', border: 'rgba(99,210,151,0.4)', shadow: 'rgba(99,210,151,0.08)' },
-    "Your Brief": { bg: 'rgba(130,130,255,0.12)', color: '#8282ff', border: 'rgba(130,130,255,0.4)', shadow: 'rgba(130,130,255,0.08)' },
+    "Confirmed": { bg: 'rgba(0,200,150,0.12)', color: '#00c896', border: 'rgba(0,200,150,0.4)', shadow: 'rgba(0,200,150,0.08)' },
     "Previous": { bg: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)', border: 'rgba(255,255,255,0.2)', shadow: 'rgba(255,255,255,0.04)' },
   };
   const c = colors[quote.tag] || colors["Previous"];
   return (
     <div onClick={onClick} style={{
-      flex:1, minWidth:300, maxWidth:360,
+      flex:1, minWidth:300, maxWidth:440,
       background: active ? 'linear-gradient(135deg,#12121a,#1a1a2e)' : '#111118',
       border: active ? `1px solid ${c.border}` : '1px solid rgba(255,255,255,0.06)',
       borderRadius:16, padding:'24px 20px', cursor:'pointer',
@@ -172,22 +166,16 @@ function QuoteCard({ quote, active, onClick }) {
 }
 
 function App() {
-  const [active, setActive] = useState('a');
-  const [grid, setGrid] = useState(comparisonFeatures.map(f => ({...f})));
+  const [active, setActive] = useState('agreed');
   
-  // Builder state — core features on by default
   const [selected, setSelected] = useState(() => {
     const s = {};
-    builderFeatures.forEach(f => { s[f.id] = f.core; });
+    builderFeatures.forEach(f => { s[f.id] = f.core || f.default; });
     return s;
   });
-  
-  const toggle = (i, col) => {
-    setGrid(prev => prev.map((f,j) => j===i ? {...f, [col]: !f[col]} : f));
-  };
 
   const toggleBuilder = (id, core) => {
-    if (core) return; // can't deselect core features
+    if (core) return;
     setSelected(prev => ({...prev, [id]: !prev[id]}));
   };
 
@@ -208,7 +196,7 @@ function App() {
   }, [customTotal]);
   
   return (
-    <div style={{maxWidth:1200,margin:'0 auto',padding:'40px 20px'}}>
+    <div style={{maxWidth:1100,margin:'0 auto',padding:'40px 20px'}}>
       <div style={{textAlign:'center',marginBottom:40}}>
         <div style={{fontSize:11,fontWeight:600,textTransform:'uppercase',letterSpacing:3,color:'rgba(255,255,255,0.25)',marginBottom:8}}>
           Project Proposal
@@ -221,15 +209,15 @@ function App() {
         </p>
       </div>
 
+      {/* Quote Cards */}
       <div style={{display:'flex',gap:16,flexWrap:'wrap',justifyContent:'center',marginBottom:50}}>
         <QuoteCard quote={quoteOriginal} active={active==='orig'} onClick={()=>setActive('orig')} />
-        <QuoteCard quote={quoteA} active={active==='a'} onClick={()=>setActive('a')} />
-        <QuoteCard quote={quoteB} active={active==='b'} onClick={()=>setActive('b')} />
+        <QuoteCard quote={quoteAgreed} active={active==='agreed'} onClick={()=>setActive('agreed')} />
       </div>
 
       {/* Comparison Grid */}
       <div style={{
-        maxWidth:800,margin:'0 auto 50px',
+        maxWidth:700,margin:'0 auto 50px',
         background:'#111118',border:'1px solid rgba(255,255,255,0.06)',
         borderRadius:16,padding:'24px',overflowX:'auto'
       }}>
@@ -239,32 +227,67 @@ function App() {
             <tr>
               <th style={{textAlign:'left',padding:'10px 12px',fontSize:13,fontWeight:500,color:'rgba(255,255,255,0.4)',borderBottom:'1px solid rgba(255,255,255,0.08)'}}>Feature</th>
               <th style={{textAlign:'center',padding:'10px 12px',fontSize:12,fontWeight:600,color:'rgba(255,255,255,0.5)',borderBottom:'1px solid rgba(255,255,255,0.08)',whiteSpace:'nowrap'}}>Original<br/><span style={{color:'rgba(255,255,255,0.3)',fontWeight:400}}>$13,400</span></th>
-              <th style={{textAlign:'center',padding:'10px 12px',fontSize:12,fontWeight:600,color:'#63d297',borderBottom:'1px solid rgba(255,255,255,0.08)',whiteSpace:'nowrap'}}>Essentials<br/><span style={{fontWeight:400}}>$9,000</span></th>
-              <th style={{textAlign:'center',padding:'10px 12px',fontSize:12,fontWeight:600,color:'#8282ff',borderBottom:'1px solid rgba(255,255,255,0.08)',whiteSpace:'nowrap'}}>Full Feature<br/><span style={{fontWeight:400}}>$14,000</span></th>
+              <th style={{textAlign:'center',padding:'10px 12px',fontSize:12,fontWeight:600,color:'#00c896',borderBottom:'1px solid rgba(255,255,255,0.08)',whiteSpace:'nowrap'}}>Agreed MVP<br/><span style={{fontWeight:400}}>$13,400</span></th>
             </tr>
           </thead>
           <tbody>
-            {grid.map((f,i) => (
+            {comparisonFeatures.map((f,i) => (
               <tr key={i} style={{borderBottom:'1px solid rgba(255,255,255,0.04)'}}>
                 <td style={{padding:'10px 12px',fontSize:13,color:'rgba(255,255,255,0.7)'}}>{f.name}</td>
-                <td onClick={()=>toggle(i,'orig')} style={{textAlign:'center',padding:'10px 12px',cursor:'pointer',userSelect:'none'}}>{f.orig ? <Tick/> : <Cross/>}</td>
-                <td onClick={()=>toggle(i,'ess')} style={{textAlign:'center',padding:'10px 12px',cursor:'pointer',userSelect:'none'}}>{f.ess ? <Tick/> : <Cross/>}</td>
-                <td onClick={()=>toggle(i,'full')} style={{textAlign:'center',padding:'10px 12px',cursor:'pointer',userSelect:'none'}}>{f.full ? <Tick/> : <Cross/>}</td>
+                <td style={{textAlign:'center',padding:'10px 12px'}}>{f.orig ? <Tick/> : <Cross/>}</td>
+                <td style={{textAlign:'center',padding:'10px 12px'}}>{f.agreed ? <Tick/> : <Cross/>}</td>
               </tr>
             ))}
             <tr style={{borderTop:'2px solid rgba(255,255,255,0.1)'}}>
               <td style={{padding:'12px',fontSize:14,fontWeight:600,color:'#fff'}}>Total Features</td>
-              <td style={{textAlign:'center',padding:'12px',fontSize:14,fontWeight:600,color:'rgba(255,255,255,0.5)'}}>{grid.filter(f=>f.orig).length}</td>
-              <td style={{textAlign:'center',padding:'12px',fontSize:14,fontWeight:600,color:'#63d297'}}>{grid.filter(f=>f.ess).length}</td>
-              <td style={{textAlign:'center',padding:'12px',fontSize:14,fontWeight:600,color:'#8282ff'}}>{grid.filter(f=>f.full).length}</td>
+              <td style={{textAlign:'center',padding:'12px',fontSize:14,fontWeight:600,color:'rgba(255,255,255,0.5)'}}>{comparisonFeatures.filter(f=>f.orig).length}</td>
+              <td style={{textAlign:'center',padding:'12px',fontSize:14,fontWeight:600,color:'#00c896'}}>{comparisonFeatures.filter(f=>f.agreed).length}</td>
             </tr>
           </tbody>
         </table>
       </div>
 
+      {/* Payment Schedule */}
+      <div style={{
+        maxWidth:700,margin:'0 auto 50px',
+        background:'#111118',border:'1px solid rgba(130,130,255,0.15)',
+        borderRadius:16,padding:'24px'
+      }}>
+        <h3 style={{fontSize:16,fontWeight:600,color:'#8282ff',marginBottom:4}}>Payment Schedule</h3>
+        <p style={{fontSize:12,color:'rgba(255,255,255,0.3)',marginBottom:16}}>
+          Broken into three phases
+        </p>
+        <div style={{display:'flex',flexDirection:'column',gap:10}}>
+          {paymentSchedule.map((p,i) => (
+            <div key={i} style={{
+              display:'flex',justifyContent:'space-between',alignItems:'center',
+              padding:'14px 16px',borderRadius:10,
+              background:'rgba(130,130,255,0.04)',
+              border:'1px solid rgba(130,130,255,0.1)',
+            }}>
+              <div style={{flex:1}}>
+                <div style={{fontSize:14,fontWeight:600,color:'#fff',marginBottom:2}}>
+                  {i+1}. {p.phase} <span style={{color:'#8282ff',fontWeight:500}}>({p.pct})</span>
+                </div>
+                <div style={{fontSize:12,color:'rgba(255,255,255,0.35)'}}>Trigger: {p.trigger}</div>
+              </div>
+              <div style={{fontSize:18,fontWeight:700,color:'#8282ff',whiteSpace:'nowrap',marginLeft:16}}>
+                ${p.amount.toLocaleString()}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div style={{marginTop:16,padding:'12px 16px',borderRadius:10,background:'rgba(255,255,255,0.02)',border:'1px solid rgba(255,255,255,0.06)'}}>
+          <div style={{fontSize:13,color:'rgba(255,255,255,0.4)'}}>
+            ✓ 2 weeks post-launch support included<br/>
+            ✓ Additional support available via hourly packs
+          </div>
+        </div>
+      </div>
+
       {/* Custom Quote Builder */}
       <div style={{
-        maxWidth:800,margin:'0 auto 50px',
+        maxWidth:700,margin:'0 auto 50px',
         background:'linear-gradient(135deg,#111118,#161625)',
         border:'1px solid rgba(0,200,150,0.2)',
         borderRadius:16,padding:'28px',
@@ -273,7 +296,7 @@ function App() {
           <div>
             <h3 style={{fontSize:18,fontWeight:700,color:'#fff',marginBottom:4}}>🛠 Custom Quote Builder</h3>
             <p style={{fontSize:13,color:'rgba(255,255,255,0.35)'}}>
-              Toggle features to build a custom scope — core features are always included
+              Toggle features to explore scope — core features always included
             </p>
           </div>
           <div style={{textAlign:'right'}}>
@@ -281,25 +304,20 @@ function App() {
             <div style={{fontSize:13,color:'rgba(255,255,255,0.4)'}}>{customCount} features · ~{estimateWeeks} weeks</div>
           </div>
         </div>
-
         <div style={{display:'flex',flexDirection:'column',gap:8}}>
           {builderFeatures.map((f) => {
             const on = selected[f.id];
             const core = f.core;
             return (
-              <div
-                key={f.id}
-                onClick={() => toggleBuilder(f.id, core)}
-                style={{
-                  display:'flex',justifyContent:'space-between',alignItems:'center',
-                  padding:'12px 14px',borderRadius:10,
-                  background: on ? 'rgba(0,200,150,0.06)' : 'rgba(255,255,255,0.01)',
-                  border: on ? '1px solid rgba(0,200,150,0.2)' : '1px solid rgba(255,255,255,0.04)',
-                  cursor: core ? 'default' : 'pointer',
-                  opacity: on ? 1 : 0.5,
-                  transition:'all 0.2s ease',
-                }}
-              >
+              <div key={f.id} onClick={() => toggleBuilder(f.id, core)} style={{
+                display:'flex',justifyContent:'space-between',alignItems:'center',
+                padding:'12px 14px',borderRadius:10,
+                background: on ? 'rgba(0,200,150,0.06)' : 'rgba(255,255,255,0.01)',
+                border: on ? '1px solid rgba(0,200,150,0.2)' : '1px solid rgba(255,255,255,0.04)',
+                cursor: core ? 'default' : 'pointer',
+                opacity: on ? 1 : 0.5,
+                transition:'all 0.2s ease',
+              }}>
                 <div style={{display:'flex',alignItems:'center',gap:12,flex:1}}>
                   <div style={{
                     width:22,height:22,borderRadius:6,
@@ -307,8 +325,7 @@ function App() {
                     background: on ? 'rgba(0,200,150,0.2)' : 'rgba(255,255,255,0.05)',
                     border: on ? '1px solid rgba(0,200,150,0.4)' : '1px solid rgba(255,255,255,0.1)',
                     fontSize:14,color: on ? '#00c896' : 'rgba(255,255,255,0.2)',
-                    transition:'all 0.2s ease',
-                    flexShrink:0,
+                    transition:'all 0.2s ease',flexShrink:0,
                   }}>
                     {on ? '✓' : ''}
                   </div>
@@ -331,7 +348,7 @@ function App() {
 
       {/* Phase 2 */}
       <div style={{
-        maxWidth:800,margin:'0 auto',
+        maxWidth:700,margin:'0 auto',
         background:'#111118',border:'1px solid rgba(255,255,255,0.06)',
         borderRadius:16,padding:'24px'
       }}>
