@@ -7,16 +7,21 @@
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://unpkg.com/framer-motion@11/dist/framer-motion.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:#0a0a0f;color:#e0e0e0;min-height:100vh}
+body{font-family:'Inter',sans-serif;background:#0a0a0f;color:#e0e0e0;min-height:100vh;overflow-x:hidden}
 </style>
 </head>
 <body>
 <div id="root"></div>
 <script type="text/babel">
-const { useState, useMemo } = React;
+const { useState } = React;
+const { motion, AnimatePresence } = window["framer-motion"] || {};
+
+// Fallback if framer-motion doesn't load as expected
+const M = motion || { div: 'div', h1: 'h1', p: 'p', span: 'span' };
 
 const quoteOriginal = {
   name: "Original Quote",
@@ -48,52 +53,16 @@ const quoteAgreed = {
     { name: "User Profiles & Follows", desc: "Profile page, avatar, bio, follower/following counts, follow system" },
     { name: "Reviews & Tags", desc: "Numerical score, optional label tagging, bookmark as alternative" },
     { name: "Custom Lists", desc: "Create, save, and manage personal venue lists" },
-    { name: "Notification Bell", desc: "Activity notifications from follows and reviews (replaces full feed)" },
+    { name: "Notification Bell", desc: "Activity notifications from follows and reviews" },
     { name: "Core Infrastructure", desc: "Database (Supabase), hosting, object storage, API layer" },
     { name: "App Store Deployment", desc: "Full iOS & Android setup, submission, and approval" },
   ]
 };
 
-const comparisonFeatures = [
-  { name: "Interactive NYC Map",             orig: true,  agreed: true },
-  { name: "Venue Markers",                   orig: true,  agreed: true },
-  { name: "User Location",                   orig: true,  agreed: true },
-  { name: "Heat Markers & Clustering",       orig: true,  agreed: false },
-  { name: "Search-to-Map Navigation",        orig: true,  agreed: false },
-  { name: "Venue Search & Filters",          orig: true,  agreed: true },
-  { name: "Search Results with Photos",      orig: true,  agreed: true },
-  { name: "Venue Pages (full info)",         orig: false, agreed: true },
-  { name: "Google Ratings (launch data)",    orig: false, agreed: true },
-  { name: "Auth & Accounts",                orig: true,  agreed: true },
-  { name: "Email Verification & Reset",     orig: false, agreed: true },
-  { name: "User Profiles",                  orig: false, agreed: true },
-  { name: "Follow System & Counts",         orig: false, agreed: true },
-  { name: "Basic Rating System",            orig: true,  agreed: true },
-  { name: "Label Tagging on Reviews",       orig: false, agreed: true },
-  { name: "Bookmark (save without review)", orig: false, agreed: true },
-  { name: "Custom Venue Lists",             orig: false, agreed: true },
-  { name: "Notification Bell",              orig: false, agreed: true },
-  { name: "Core Infrastructure",            orig: false, agreed: true },
-  { name: "App Store Deployment",           orig: false, agreed: true },
-];
-
-const builderFeatures = [
-  { id: "map",       name: "Interactive NYC Map",          desc: "Venue markers, user location, navigation",              price: 1800, core: true },
-  { id: "search",    name: "Search & Discovery",           desc: "Search bar, filters, results with photos",              price: 1500, core: true },
-  { id: "venues",    name: "Venue Pages",                  desc: "Full venue info, photos, hours, Google ratings",        price: 1200, core: true },
-  { id: "auth",      name: "Auth & Accounts",              desc: "Sign up, login, email verification, password reset",    price: 1200, core: true },
-  { id: "infra",     name: "Core Infrastructure",          desc: "Database (Supabase), hosting, object storage, API",     price: 1500, core: true },
-  { id: "appstore",  name: "App Store Deployment",         desc: "Full iOS & Android setup, submission, and approval",    price: 0,    core: true },
-  { id: "profiles",  name: "User Profiles & Follows",      desc: "Profile page, avatar, bio, follow system, follower/following counts", price: 1500, core: false, default: true },
-  { id: "reviews",   name: "Basic Reviews",                desc: "Numerical score, text review, display on venue",        price: 1000, core: false, default: true },
-  { id: "tags",      name: "Label Tagging on Reviews",     desc: "Optional label tags on reviews",                        price: 800,  core: false, default: true },
-  { id: "bookmark",  name: "Bookmark / Save",              desc: "Bookmark venues as alternative to reviewing",           price: 700,  core: false, default: true },
-  { id: "lists",     name: "Custom Venue Lists",           desc: "Create, save, and manage personal lists",               price: 1500, core: false, default: true },
-  { id: "bell",      name: "Notification Bell",            desc: "Activity notifications from follows and reviews",       price: 700,  core: false, default: true },
-  { id: "heat",      name: "Heat Markers & Clustering",    desc: "Animated thermal dots, supercluster grouping",          price: 1000, core: false, default: false },
-  { id: "mapnav",    name: "Search-to-Map Navigation",     desc: "Jump from search results to map pin",                   price: 600,  core: false, default: false },
-  { id: "feed",      name: "Full Activity Feed",           desc: "Scrollable feed of friends' reviews and activity",      price: 2000, core: false, default: false },
-  { id: "push",      name: "Push Notifications",           desc: "Real-time native push alerts",                          price: 1200, core: false, default: false },
+const paymentSchedule = [
+  { phase: "Design Phase", pct: "25%", amount: 3350, trigger: "On signing" },
+  { phase: "Build Phase", pct: "25%", amount: 3350, trigger: "Design sign-off" },
+  { phase: "Delivery & Launch", pct: "50%", amount: 6700, trigger: "QA complete + launch" },
 ];
 
 const phase2 = [
@@ -105,213 +74,210 @@ const phase2 = [
   "Venue owner profiles",
 ];
 
-const paymentSchedule = [
-  { phase: "Design Phase", pct: "25%", amount: 3350, trigger: "On signing" },
-  { phase: "Build Phase", pct: "25%", amount: 3350, trigger: "Design sign-off" },
-  { phase: "Delivery & Launch", pct: "50%", amount: 6700, trigger: "QA complete + launch" },
-];
-
-function Tick() {
-  return <span style={{color:'#63d297',fontSize:18,fontWeight:700}}>✓</span>;
-}
-function Cross() {
-  return <span style={{color:'rgba(255,255,255,0.15)',fontSize:18,fontWeight:700}}>✗</span>;
-}
-
-function QuoteCard({ quote, active, onClick }) {
+function QuoteCard({ quote, active, onClick, index }) {
   const colors = {
-    "Confirmed": { bg: 'rgba(0,200,150,0.12)', color: '#00c896', border: 'rgba(0,200,150,0.4)', shadow: 'rgba(0,200,150,0.08)' },
-    "Previous": { bg: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)', border: 'rgba(255,255,255,0.2)', shadow: 'rgba(255,255,255,0.04)' },
+    "Confirmed": { bg: 'rgba(0,200,150,0.12)', color: '#00c896', border: 'rgba(0,200,150,0.4)', shadow: 'rgba(0,200,150,0.08)', glow: 'rgba(0,200,150,0.15)' },
+    "Previous": { bg: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)', border: 'rgba(255,255,255,0.2)', shadow: 'rgba(255,255,255,0.04)', glow: 'transparent' },
   };
   const c = colors[quote.tag] || colors["Previous"];
   return (
-    <div onClick={onClick} style={{
-      flex:1, minWidth:300, maxWidth:440,
-      background: active ? 'linear-gradient(135deg,#12121a,#1a1a2e)' : '#111118',
-      border: active ? `1px solid ${c.border}` : '1px solid rgba(255,255,255,0.06)',
-      borderRadius:16, padding:'24px 20px', cursor:'pointer',
-      transition:'all 0.3s ease',
-      transform: active ? 'scale(1.01)' : 'scale(0.99)',
-      boxShadow: active ? `0 8px 40px ${c.shadow}` : 'none'
-    }}>
-      <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:6}}>
+    <M.div
+      initial={{opacity:0, y:40}}
+      animate={{opacity:1, y:0}}
+      transition={{duration:0.6, delay: 0.2 + index * 0.15, ease:[0.25,0.46,0.45,0.94]}}
+      onClick={onClick}
+      whileHover={{scale:1.02, y:-4}}
+      whileTap={{scale:0.98}}
+      style={{
+        flex:1, minWidth:300, maxWidth:440,
+        background: active ? 'linear-gradient(135deg,#12121a,#1a1a2e)' : '#111118',
+        border: active ? `1px solid ${c.border}` : '1px solid rgba(255,255,255,0.06)',
+        borderRadius:16, padding:'28px 24px', cursor:'pointer',
+        boxShadow: active ? `0 8px 40px ${c.shadow}, 0 0 60px ${c.glow}` : 'none',
+      }}
+    >
+      <M.div initial={{opacity:0,x:-10}} animate={{opacity:1,x:0}} transition={{delay:0.4+index*0.15}}>
         <span style={{
           fontSize:10,fontWeight:600,textTransform:'uppercase',letterSpacing:1.5,
           padding:'4px 10px',borderRadius:20,
           background: c.bg, color: c.color,
         }}>{quote.tag}</span>
-      </div>
-      <h2 style={{fontSize:20,fontWeight:600,marginBottom:4,color:'#fff'}}>{quote.name}</h2>
+      </M.div>
+      <h2 style={{fontSize:22,fontWeight:600,marginTop:10,marginBottom:4,color:'#fff'}}>{quote.name}</h2>
       <div style={{display:'flex',alignItems:'baseline',gap:8,marginBottom:4}}>
-        <span style={{fontSize:32,fontWeight:700,color:'#fff'}}>${quote.price.toLocaleString()}</span>
-        <span style={{fontSize:13,color:'rgba(255,255,255,0.4)'}}>USD</span>
+        <span style={{fontSize:36,fontWeight:700,color:'#fff'}}>${quote.price.toLocaleString()}</span>
+        <span style={{fontSize:14,color:'rgba(255,255,255,0.4)'}}>USD</span>
       </div>
-      <p style={{fontSize:13,color:'rgba(255,255,255,0.4)',marginBottom:16}}>
+      <p style={{fontSize:13,color:'rgba(255,255,255,0.4)',marginBottom:20}}>
         Timeline: {quote.timeline}
       </p>
       <div style={{display:'flex',flexDirection:'column',gap:8}}>
         {quote.features.map((f,i) => (
-          <div key={i} style={{
-            padding:'8px 10px',borderRadius:8,
-            background:'rgba(255,255,255,0.02)',
-            border:'1px solid rgba(255,255,255,0.04)',
-          }}>
+          <M.div
+            key={i}
+            initial={{opacity:0,x:-20}}
+            animate={{opacity:1,x:0}}
+            transition={{duration:0.4, delay:0.5 + index*0.15 + i*0.05, ease:'easeOut'}}
+            style={{
+              padding:'10px 12px',borderRadius:10,
+              background:'rgba(255,255,255,0.02)',
+              border:'1px solid rgba(255,255,255,0.04)',
+            }}
+          >
             <div style={{fontSize:13,fontWeight:500,color:'#fff',marginBottom:1}}>{f.name}</div>
             <div style={{fontSize:11,color:'rgba(255,255,255,0.3)'}}>{f.desc}</div>
-          </div>
+          </M.div>
         ))}
       </div>
-    </div>
+    </M.div>
   );
 }
 
 function App() {
   const [active, setActive] = useState('agreed');
   
-  const [selected, setSelected] = useState(() => {
-    const s = {};
-    builderFeatures.forEach(f => { s[f.id] = f.core || f.default; });
-    return s;
-  });
-
-  const toggleBuilder = (id, core) => {
-    if (core) return;
-    setSelected(prev => ({...prev, [id]: !prev[id]}));
-  };
-
-  const customTotal = useMemo(() => {
-    return builderFeatures.reduce((sum, f) => selected[f.id] ? sum + f.price : sum, 0);
-  }, [selected]);
-
-  const customCount = useMemo(() => {
-    return builderFeatures.filter(f => selected[f.id]).length;
-  }, [selected]);
-
-  const estimateWeeks = useMemo(() => {
-    if (customTotal <= 7200) return "4–5";
-    if (customTotal <= 9500) return "6";
-    if (customTotal <= 12000) return "7–8";
-    if (customTotal <= 15000) return "8–10";
-    return "10–12";
-  }, [customTotal]);
-  
   return (
     <div style={{maxWidth:1100,margin:'0 auto',padding:'40px 20px'}}>
-      <div style={{textAlign:'center',marginBottom:40}}>
-        <div style={{fontSize:11,fontWeight:600,textTransform:'uppercase',letterSpacing:3,color:'rgba(255,255,255,0.25)',marginBottom:8}}>
+      {/* Header */}
+      <M.div
+        initial={{opacity:0, y:-20}}
+        animate={{opacity:1, y:0}}
+        transition={{duration:0.7, ease:[0.25,0.46,0.45,0.94]}}
+        style={{textAlign:'center',marginBottom:50}}
+      >
+        <M.div
+          initial={{opacity:0,scale:0.9}}
+          animate={{opacity:1,scale:1}}
+          transition={{delay:0.1,duration:0.5}}
+          style={{fontSize:11,fontWeight:600,textTransform:'uppercase',letterSpacing:3,color:'rgba(255,255,255,0.25)',marginBottom:8}}
+        >
           Project Proposal
-        </div>
-        <h1 style={{fontSize:32,fontWeight:700,color:'#fff',marginBottom:6}}>
+        </M.div>
+        <M.h1
+          initial={{opacity:0,y:10}}
+          animate={{opacity:1,y:0}}
+          transition={{delay:0.15,duration:0.6}}
+          style={{fontSize:34,fontWeight:700,color:'#fff',marginBottom:6}}
+        >
           NYC Venue Discovery App
-        </h1>
-        <p style={{fontSize:15,color:'rgba(255,255,255,0.35)'}}>
+        </M.h1>
+        <M.p
+          initial={{opacity:0}}
+          animate={{opacity:1}}
+          transition={{delay:0.3,duration:0.5}}
+          style={{fontSize:15,color:'rgba(255,255,255,0.35)'}}
+        >
           Prepared by Grow Smart AI — February 2026
-        </p>
-      </div>
+        </M.p>
+      </M.div>
 
       {/* Quote Cards */}
-      <div style={{display:'flex',gap:16,flexWrap:'wrap',justifyContent:'center',marginBottom:50}}>
-        <QuoteCard quote={quoteOriginal} active={active==='orig'} onClick={()=>setActive('orig')} />
-        <QuoteCard quote={quoteAgreed} active={active==='agreed'} onClick={()=>setActive('agreed')} />
-      </div>
-
-      {/* Comparison Grid */}
-      <div style={{
-        maxWidth:700,margin:'0 auto 50px',
-        background:'#111118',border:'1px solid rgba(255,255,255,0.06)',
-        borderRadius:16,padding:'24px',overflowX:'auto'
-      }}>
-        <h3 style={{fontSize:16,fontWeight:600,color:'#fff',marginBottom:20}}>Feature Comparison</h3>
-        <table style={{width:'100%',borderCollapse:'collapse'}}>
-          <thead>
-            <tr>
-              <th style={{textAlign:'left',padding:'10px 12px',fontSize:13,fontWeight:500,color:'rgba(255,255,255,0.4)',borderBottom:'1px solid rgba(255,255,255,0.08)'}}>Feature</th>
-              <th style={{textAlign:'center',padding:'10px 12px',fontSize:12,fontWeight:600,color:'rgba(255,255,255,0.5)',borderBottom:'1px solid rgba(255,255,255,0.08)',whiteSpace:'nowrap'}}>Original<br/><span style={{color:'rgba(255,255,255,0.3)',fontWeight:400}}>$13,400</span></th>
-              <th style={{textAlign:'center',padding:'10px 12px',fontSize:12,fontWeight:600,color:'#00c896',borderBottom:'1px solid rgba(255,255,255,0.08)',whiteSpace:'nowrap'}}>Agreed MVP<br/><span style={{fontWeight:400}}>$13,400</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            {comparisonFeatures.map((f,i) => (
-              <tr key={i} style={{borderBottom:'1px solid rgba(255,255,255,0.04)'}}>
-                <td style={{padding:'10px 12px',fontSize:13,color:'rgba(255,255,255,0.7)'}}>{f.name}</td>
-                <td style={{textAlign:'center',padding:'10px 12px'}}>{f.orig ? <Tick/> : <Cross/>}</td>
-                <td style={{textAlign:'center',padding:'10px 12px'}}>{f.agreed ? <Tick/> : <Cross/>}</td>
-              </tr>
-            ))}
-            <tr style={{borderTop:'2px solid rgba(255,255,255,0.1)'}}>
-              <td style={{padding:'12px',fontSize:14,fontWeight:600,color:'#fff'}}>Total Features</td>
-              <td style={{textAlign:'center',padding:'12px',fontSize:14,fontWeight:600,color:'rgba(255,255,255,0.5)'}}>{comparisonFeatures.filter(f=>f.orig).length}</td>
-              <td style={{textAlign:'center',padding:'12px',fontSize:14,fontWeight:600,color:'#00c896'}}>{comparisonFeatures.filter(f=>f.agreed).length}</td>
-            </tr>
-          </tbody>
-        </table>
+      <div style={{display:'flex',gap:20,flexWrap:'wrap',justifyContent:'center',marginBottom:60}}>
+        <QuoteCard quote={quoteOriginal} active={active==='orig'} onClick={()=>setActive('orig')} index={0} />
+        <QuoteCard quote={quoteAgreed} active={active==='agreed'} onClick={()=>setActive('agreed')} index={1} />
       </div>
 
       {/* Payment Schedule */}
-      <div style={{
-        maxWidth:700,margin:'0 auto 50px',
-        background:'#111118',border:'1px solid rgba(130,130,255,0.15)',
-        borderRadius:16,padding:'24px'
-      }}>
-        <h3 style={{fontSize:16,fontWeight:600,color:'#8282ff',marginBottom:4}}>Payment Schedule</h3>
-        <p style={{fontSize:12,color:'rgba(255,255,255,0.3)',marginBottom:16}}>
+      <M.div
+        initial={{opacity:0,y:30}}
+        animate={{opacity:1,y:0}}
+        transition={{duration:0.6,delay:0.8,ease:'easeOut'}}
+        style={{
+          maxWidth:700,margin:'0 auto 60px',
+          background:'#111118',border:'1px solid rgba(130,130,255,0.15)',
+          borderRadius:16,padding:'28px'
+        }}
+      >
+        <h3 style={{fontSize:18,fontWeight:600,color:'#8282ff',marginBottom:4}}>Payment Schedule</h3>
+        <p style={{fontSize:12,color:'rgba(255,255,255,0.3)',marginBottom:20}}>
           Broken into three phases
         </p>
-        <div style={{display:'flex',flexDirection:'column',gap:10}}>
+        <div style={{display:'flex',flexDirection:'column',gap:12}}>
           {paymentSchedule.map((p,i) => (
-            <div key={i} style={{
-              display:'flex',justifyContent:'space-between',alignItems:'center',
-              padding:'14px 16px',borderRadius:10,
-              background:'rgba(130,130,255,0.04)',
-              border:'1px solid rgba(130,130,255,0.1)',
-            }}>
+            <M.div
+              key={i}
+              initial={{opacity:0,x:-30}}
+              animate={{opacity:1,x:0}}
+              transition={{duration:0.5,delay:1.0+i*0.12,ease:'easeOut'}}
+              whileHover={{x:4}}
+              style={{
+                display:'flex',justifyContent:'space-between',alignItems:'center',
+                padding:'16px 18px',borderRadius:12,
+                background:'rgba(130,130,255,0.04)',
+                border:'1px solid rgba(130,130,255,0.1)',
+              }}
+            >
               <div style={{flex:1}}>
-                <div style={{fontSize:14,fontWeight:600,color:'#fff',marginBottom:2}}>
+                <div style={{fontSize:15,fontWeight:600,color:'#fff',marginBottom:3}}>
                   {i+1}. {p.phase} <span style={{color:'#8282ff',fontWeight:500}}>({p.pct})</span>
                 </div>
                 <div style={{fontSize:12,color:'rgba(255,255,255,0.35)'}}>Trigger: {p.trigger}</div>
               </div>
-              <div style={{fontSize:18,fontWeight:700,color:'#8282ff',whiteSpace:'nowrap',marginLeft:16}}>
+              <div style={{fontSize:20,fontWeight:700,color:'#8282ff',whiteSpace:'nowrap',marginLeft:16}}>
                 ${p.amount.toLocaleString()}
               </div>
-            </div>
+            </M.div>
           ))}
         </div>
-        <div style={{marginTop:16,padding:'12px 16px',borderRadius:10,background:'rgba(255,255,255,0.02)',border:'1px solid rgba(255,255,255,0.06)'}}>
-          <div style={{fontSize:13,color:'rgba(255,255,255,0.4)'}}>
+        <M.div
+          initial={{opacity:0}}
+          animate={{opacity:1}}
+          transition={{delay:1.4,duration:0.5}}
+          style={{marginTop:18,padding:'14px 18px',borderRadius:12,background:'rgba(255,255,255,0.02)',border:'1px solid rgba(255,255,255,0.06)'}}
+        >
+          <div style={{fontSize:13,color:'rgba(255,255,255,0.4)',lineHeight:1.8}}>
             ✓ 2 weeks post-launch support included<br/>
             ✓ Additional support available via hourly packs
           </div>
-        </div>
-      </div>
+        </M.div>
+      </M.div>
 
       {/* Phase 2 */}
-      <div style={{
-        maxWidth:700,margin:'0 auto',
-        background:'#111118',border:'1px solid rgba(255,255,255,0.06)',
-        borderRadius:16,padding:'24px'
-      }}>
-        <h3 style={{fontSize:16,fontWeight:600,color:'#fff',marginBottom:4}}>Phase 2 Expansion</h3>
-        <p style={{fontSize:12,color:'rgba(255,255,255,0.3)',marginBottom:16}}>
+      <M.div
+        initial={{opacity:0,y:30}}
+        animate={{opacity:1,y:0}}
+        transition={{duration:0.6,delay:1.2,ease:'easeOut'}}
+        style={{
+          maxWidth:700,margin:'0 auto',
+          background:'#111118',border:'1px solid rgba(255,255,255,0.06)',
+          borderRadius:16,padding:'28px'
+        }}
+      >
+        <h3 style={{fontSize:18,fontWeight:600,color:'#fff',marginBottom:4}}>Phase 2 Expansion</h3>
+        <p style={{fontSize:12,color:'rgba(255,255,255,0.3)',marginBottom:18}}>
           Available after MVP launch — priced separately
         </p>
-        <div style={{display:'flex',flexWrap:'wrap',gap:8}}>
+        <div style={{display:'flex',flexWrap:'wrap',gap:10}}>
           {phase2.map((item,i) => (
-            <span key={i} style={{
-              fontSize:12,padding:'6px 12px',borderRadius:20,
-              background:'rgba(255,255,255,0.04)',
-              border:'1px solid rgba(255,255,255,0.08)',
-              color:'rgba(255,255,255,0.45)'
-            }}>{item}</span>
+            <M.span
+              key={i}
+              initial={{opacity:0,scale:0.8}}
+              animate={{opacity:1,scale:1}}
+              transition={{delay:1.4+i*0.08,duration:0.4,ease:'easeOut'}}
+              whileHover={{scale:1.05,borderColor:'rgba(255,255,255,0.2)'}}
+              style={{
+                fontSize:13,padding:'8px 14px',borderRadius:20,
+                background:'rgba(255,255,255,0.04)',
+                border:'1px solid rgba(255,255,255,0.08)',
+                color:'rgba(255,255,255,0.45)',
+                cursor:'default',
+              }}
+            >{item}</M.span>
           ))}
         </div>
-      </div>
+      </M.div>
 
-      <div style={{textAlign:'center',marginTop:40,paddingTop:20,borderTop:'1px solid rgba(255,255,255,0.06)'}}>
+      {/* Footer */}
+      <M.div
+        initial={{opacity:0}}
+        animate={{opacity:1}}
+        transition={{delay:1.8,duration:0.6}}
+        style={{textAlign:'center',marginTop:50,paddingTop:20,borderTop:'1px solid rgba(255,255,255,0.06)'}}
+      >
         <div style={{fontSize:12,color:'rgba(255,255,255,0.2)',letterSpacing:1}}>
           GROW SMART AI — growsmartai.co.uk
         </div>
-      </div>
+      </M.div>
     </div>
   );
 }
