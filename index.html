@@ -23,20 +23,19 @@ const { motion, AnimatePresence } = window["framer-motion"] || {};
 // Fallback if framer-motion doesn't load as expected
 const M = motion || { div: 'div', h1: 'h1', p: 'p', span: 'span' };
 
-const quoteOriginal = {
-  name: "Original Quote",
-  tag: "Previous",
-  price: 13400,
-  timeline: "2 months",
+const quoteEssentials = {
+  name: "Essentials MVP",
+  tag: "Base",
+  price: 9000,
+  timeline: "6 weeks",
   features: [
-    { name: "Interactive NYC Map", desc: "Map with user location indicator" },
-    { name: "Venue Heat Markers", desc: "Animated thermal dots on map" },
-    { name: "Marker Clustering", desc: "Supercluster grouping for dense areas" },
-    { name: "Venue Detail Sheets", desc: "Bottom sheet with venue info" },
-    { name: "Venue Search", desc: "Local filtering with photo results" },
-    { name: "Search-to-Map Navigation", desc: "Jump from results to map pin" },
-    { name: "Venue Rating System", desc: "Basic numerical ratings" },
-    { name: "Auth & Accounts", desc: "Sign up, login, user accounts" },
+    { name: "NYC Interactive Map", desc: "Venue markers, user location, map navigation" },
+    { name: "Search & Discovery", desc: "Search bar, filters, results with photos" },
+    { name: "Venue Pages", desc: "Full venue info, photos, hours, location" },
+    { name: "Auth & Accounts", desc: "Sign up, login, email verification, password reset" },
+    { name: "User Profiles", desc: "Basic profile page, edit profile, avatar" },
+    { name: "Reviews", desc: "Numerical score, text review, display on venue" },
+    { name: "Core Infrastructure", desc: "Database, hosting, object storage, API layer" },
   ]
 };
 
@@ -50,12 +49,12 @@ const quoteAgreed = {
     { name: "Search & Discovery", desc: "Search bar, filters, venue results with photos (Resy-style)" },
     { name: "Venue Pages", desc: "Full venue info, photos, hours, Google ratings on launch" },
     { name: "Auth & Accounts", desc: "Sign up, login, email verification, password reset" },
-    { name: "User Profiles & Follows", desc: "Profile page, avatar, bio, follower/following counts, follow system" },
-    { name: "Reviews & Tags", desc: "Numerical score, optional label tagging, bookmark as alternative" },
-    { name: "Custom Lists", desc: "Create, save, and manage personal venue lists" },
-    { name: "Notification Bell", desc: "Activity notifications from follows and reviews" },
+    { name: "User Profiles & Follows", desc: "Profile page, avatar, bio, follower/following counts, follow system", added: true },
+    { name: "Reviews & Tags", desc: "Numerical score, optional label tagging, bookmark as alternative", added: true },
+    { name: "Custom Lists", desc: "Create, save, and manage personal venue lists", added: true },
+    { name: "Notification Bell", desc: "Activity notifications from follows and reviews", added: true },
     { name: "Core Infrastructure", desc: "Database (Supabase), hosting, object storage, API layer" },
-    { name: "App Store Deployment", desc: "Full iOS & Android setup, submission, and approval" },
+    { name: "App Store Deployment", desc: "Full iOS & Android setup, submission, and approval", added: true },
   ]
 };
 
@@ -77,7 +76,7 @@ const phase2 = [
 function QuoteCard({ quote, active, onClick, index }) {
   const colors = {
     "Confirmed": { bg: 'rgba(0,200,150,0.12)', color: '#00c896', border: 'rgba(0,200,150,0.4)', shadow: 'rgba(0,200,150,0.08)', glow: 'rgba(0,200,150,0.15)' },
-    "Previous": { bg: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)', border: 'rgba(255,255,255,0.2)', shadow: 'rgba(255,255,255,0.04)', glow: 'transparent' },
+    "Base": { bg: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)', border: 'rgba(255,255,255,0.2)', shadow: 'rgba(255,255,255,0.04)', glow: 'transparent' },
   };
   const c = colors[quote.tag] || colors["Previous"];
   return (
@@ -120,11 +119,14 @@ function QuoteCard({ quote, active, onClick, index }) {
             transition={{duration:0.4, delay:0.5 + index*0.15 + i*0.05, ease:'easeOut'}}
             style={{
               padding:'10px 12px',borderRadius:10,
-              background:'rgba(255,255,255,0.02)',
-              border:'1px solid rgba(255,255,255,0.04)',
+              background: f.added ? 'rgba(0,200,150,0.06)' : 'rgba(255,255,255,0.02)',
+              border: f.added ? '1px solid rgba(0,200,150,0.15)' : '1px solid rgba(255,255,255,0.04)',
             }}
           >
-            <div style={{fontSize:13,fontWeight:500,color:'#fff',marginBottom:1}}>{f.name}</div>
+            <div style={{fontSize:13,fontWeight:500,color:'#fff',marginBottom:1}}>
+              {f.added && <span style={{color:'#00c896',marginRight:6,fontSize:11}}>★</span>}
+              {f.name}
+            </div>
             <div style={{fontSize:11,color:'rgba(255,255,255,0.3)'}}>{f.desc}</div>
           </M.div>
         ))}
@@ -173,7 +175,7 @@ function App() {
 
       {/* Quote Cards */}
       <div style={{display:'flex',gap:20,flexWrap:'wrap',justifyContent:'center',marginBottom:60}}>
-        <QuoteCard quote={quoteOriginal} active={active==='orig'} onClick={()=>setActive('orig')} index={0} />
+        <QuoteCard quote={quoteEssentials} active={active==='ess'} onClick={()=>setActive('ess')} index={0} />
         <QuoteCard quote={quoteAgreed} active={active==='agreed'} onClick={()=>setActive('agreed')} index={1} />
       </div>
 
