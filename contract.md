@@ -26,8 +26,9 @@ Development of a mobile application (iOS & Android) for discovering, reviewing, 
 | 6 | Reviews & Tags | Numerical score, optional label tagging, bookmark as alternative to review |
 | 7 | Custom Lists | Create, save, and manage personal venue lists |
 | 8 | Notification Bell | Activity notifications from follows and reviews |
-| 9 | Core Infrastructure | Database (Supabase), hosting, object storage, API layer |
-| 10 | App Store Deployment | Full iOS & Android setup, submission, and approval |
+| 9 | Push Notifications | Real-time native push alerts for activity and updates |
+| 10 | Core Infrastructure | Database (Supabase), hosting, object storage, API layer |
+| 11 | App Store Deployment | Full iOS & Android setup, submission, and approval |
 
 ### Not Included (Phase 2+)
 - Full scrollable activity feed
@@ -36,7 +37,6 @@ Development of a mobile application (iOS & Android) for discovering, reviewing, 
 - Admin dashboard
 - AI / algorithmic recommendations
 - Venue owner profiles
-- Push notifications (native)
 
 ---
 
