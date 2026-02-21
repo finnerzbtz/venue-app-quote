@@ -29,13 +29,13 @@ const quoteEssentials = {
   price: 9000,
   timeline: "6 weeks",
   features: [
-    { name: "NYC Interactive Map", desc: "Venue markers, user location, map navigation" },
-    { name: "Search & Discovery", desc: "Search bar, filters, results with photos" },
-    { name: "Venue Pages", desc: "Full venue info, photos, hours, location" },
-    { name: "Auth & Accounts", desc: "Sign up, login, email verification, password reset" },
-    { name: "User Profiles", desc: "Basic profile page, edit profile, avatar" },
-    { name: "Reviews", desc: "Numerical score, text review, display on venue" },
-    { name: "Core Infrastructure", desc: "Database, hosting, object storage, API layer" },
+    { name: "NYC Interactive Map", desc: "Venue markers, user location, map navigation", price: 1800 },
+    { name: "Search & Discovery", desc: "Search bar, filters, results with photos", price: 1500 },
+    { name: "Venue Pages", desc: "Full venue info, photos, hours, location", price: 1200 },
+    { name: "Auth & Accounts", desc: "Sign up, login, email verification, password reset", price: 1200 },
+    { name: "User Profiles", desc: "Basic profile page, edit profile, avatar", price: 800 },
+    { name: "Reviews", desc: "Numerical score, text review, display on venue", price: 1000 },
+    { name: "Core Infrastructure", desc: "Database, hosting, object storage, API layer", price: 1500 },
   ]
 };
 
@@ -45,17 +45,17 @@ const quoteAgreed = {
   price: 13400,
   timeline: "8–10 weeks",
   features: [
-    { name: "NYC Interactive Map", desc: "Venue markers, user location, map navigation" },
-    { name: "Search & Discovery", desc: "Search bar, filters, venue results with photos (Resy-style)" },
-    { name: "Venue Pages", desc: "Full venue info, photos, hours, Google ratings on launch" },
-    { name: "Auth & Accounts", desc: "Sign up, login, email verification, password reset" },
-    { name: "User Profiles & Follows", desc: "Profile page, avatar, bio, follower/following counts, follow system", added: true },
-    { name: "Reviews & Tags", desc: "Numerical score, optional label tagging, bookmark as alternative", added: true },
-    { name: "Custom Lists", desc: "Create, save, and manage personal venue lists", added: true },
-    { name: "Notification Bell", desc: "Activity notifications from follows and reviews", added: true },
-    { name: "Push Notifications", desc: "Real-time native push alerts for activity and updates", added: true },
-    { name: "Core Infrastructure", desc: "Database (Supabase), hosting, object storage, API layer" },
-    { name: "App Store Deployment", desc: "Full iOS & Android setup, submission, and approval", added: true },
+    { name: "NYC Interactive Map", desc: "Venue markers, user location, map navigation", price: 1800 },
+    { name: "Search & Discovery", desc: "Search bar, filters, venue results with photos (Resy-style)", price: 1500 },
+    { name: "Venue Pages", desc: "Full venue info, photos, hours, Google ratings on launch", price: 1200 },
+    { name: "Auth & Accounts", desc: "Sign up, login, email verification, password reset", price: 1200 },
+    { name: "User Profiles & Follows", desc: "Profile page, avatar, bio, follower/following counts, follow system", price: 1500, added: true },
+    { name: "Reviews & Tags", desc: "Numerical score, optional label tagging, bookmark as alternative", price: 1300, added: true },
+    { name: "Custom Lists", desc: "Create, save, and manage personal venue lists", price: 1500, added: true },
+    { name: "Notification Bell", desc: "Activity notifications from follows and reviews", price: 700, added: true },
+    { name: "Push Notifications", desc: "Real-time native push alerts for activity and updates", price: 1200, added: true },
+    { name: "Core Infrastructure", desc: "Database (Supabase), hosting, object storage, API layer", price: 1500 },
+    { name: "App Store Deployment", desc: "Full iOS & Android setup, submission, and approval", price: 0, added: true },
   ]
 };
 
@@ -124,9 +124,14 @@ function QuoteCard({ quote, active, onClick, index }) {
               border: f.added ? '1px solid rgba(0,200,150,0.15)' : '1px solid rgba(255,255,255,0.04)',
             }}
           >
-            <div style={{fontSize:13,fontWeight:500,color:'#fff',marginBottom:1}}>
-              {f.added && <span style={{color:'#00c896',marginRight:6,fontSize:11}}>★</span>}
-              {f.name}
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:1}}>
+              <div style={{fontSize:13,fontWeight:500,color:'#fff'}}>
+                {f.added && <span style={{color:'#00c896',marginRight:6,fontSize:11}}>★</span>}
+                {f.name}
+              </div>
+              <div style={{fontSize:12,fontWeight:600,color: f.added ? '#00c896' : 'rgba(255,255,255,0.3)',whiteSpace:'nowrap',marginLeft:12}}>
+                {f.price === 0 ? 'Included' : `$${f.price.toLocaleString()}`}
+              </div>
             </div>
             <div style={{fontSize:11,color:'rgba(255,255,255,0.3)'}}>{f.desc}</div>
           </M.div>
